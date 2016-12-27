@@ -31,17 +31,34 @@
 
     // Array.prototype.filter()
     // 1. Filter the list of inventors for those who were born in the 1500's
+    console.log(inventors.filter(function (inventor) {
+      return inventor.year >= 1500 && inventor.year < 1600;
+    }));
 
     // Array.prototype.map()
     // 2. Give us an array of the inventors' first and last names
+    console.log(inventors.map(function (inventor) {
+      return inventor.first + ' ' + inventor.last;
+    }));
 
     // Array.prototype.sort()
     // 3. Sort the inventors by birthdate, oldest to youngest
+    const orderedInventors = inventors.sort((a, b) => a.year - b.year);
+    console.log(JSON.parse(JSON.stringify(orderedInventors))); //tried to make a clone so, the logged value does not change through referencing
 
     // Array.prototype.reduce()
     // 4. How many years did all the inventors live?
+    console.log(inventors.reduce(function (inventorA, inventorB) {
+      return (!Number.isInteger(inventorA) ? (inventorA.passed - inventorA.year) : inventorA) + (inventorB.passed - inventorB.year);
+    }));
 
     // 5. Sort the inventors by years lived
+
+    console.log(inventors.sort(function (inventorA, inventorB) {
+      inventorA.livedFor = (inventorA.passed - inventorA.year);
+      inventorB.livedFor = (inventorB.passed - inventorB.year);
+      return inventorA.livedFor - inventorB.livedFor;
+    }));
 
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
     // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
@@ -49,11 +66,18 @@
 
     // 7. sort Exercise
     // Sort the people alphabetically by last name
+    console.log(people.sort(function (a, b) {
+      return a.split(', ')[0] > b.split(', ')[0] ? 1 : -1;
+    }));
 
     // 8. Reduce Exercise
     // Sum up the instances of each of these
     const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
-
+    console.log(data.reduce(function (obj, item) {
+      obj[item] = obj[item] || 0;
+      obj[item]++;
+      return obj;
+    }, {}));
   </script>
 </body>
 </html>
