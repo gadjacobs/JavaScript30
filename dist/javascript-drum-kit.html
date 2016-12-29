@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>JS Drum Kit</title>
+</head>
+
+<body>
+
+
+    <div class="keys">
+        <div data-key="65" class="key">
+            <kbd>A</kbd>
+            <span class="sound">clap</span>
+        </div>
+        <div data-key="83" class="key">
+            <kbd>S</kbd>
+            <span class="sound">hihat</span>
+        </div>
+        <div data-key="68" class="key">
+            <kbd>D</kbd>
+            <span class="sound">kick</span>
+        </div>
+        <div data-key="70" class="key">
+            <kbd>F</kbd>
+            <span class="sound">openhat</span>
+        </div>
+        <div data-key="71" class="key">
+            <kbd>G</kbd>
+            <span class="sound">boom</span>
+        </div>
+        <div data-key="72" class="key">
+            <kbd>H</kbd>
+            <span class="sound">ride</span>
+        </div>
+        <div data-key="74" class="key">
+            <kbd>J</kbd>
+            <span class="sound">snare</span>
+        </div>
+        <div data-key="75" class="key">
+            <kbd>K</kbd>
+            <span class="sound">tom</span>
+        </div>
+        <div data-key="76" class="key">
+            <kbd>L</kbd>
+            <span class="sound">tink</span>
+        </div>
+    </div>
+
+    <audio data-key="65" src="clap.wav"></audio>
+    <audio data-key="83" src="hihat.wav"></audio>
+    <audio data-key="68" src="kick.wav"></audio>
+    <audio data-key="70" src="openhat.wav"></audio>
+    <audio data-key="71" src="boom.wav"></audio>
+    <audio data-key="72" src="ride.wav"></audio>
+    <audio data-key="74" src="snare.wav"></audio>
+    <audio data-key="75" src="tom.wav"></audio>
+    <audio data-key="76" src="tink.wav"></audio>
+
+    <script>
+  function playAudio(code) {
+      const audio = document.querySelector(`audio[data-key="${code}"]`);
+        if (!audio) return;
+        audio.currentTime = 0;
+        audio.play();
+  }
+
+  window.addEventListener("keypress", function (e) {
+    let code = e.keyCode > 91 ? e.keyCode - 32 : e.keyCode; //should't matter whether CAPSLOCK is ON or OFF
+    playAudio(code);
+
+    const elem = document.querySelector(`.key[data-key="${code}"]`);
+    elem.classList.add("playing");
+  });
+
+  Array.from(document.querySelectorAll('.key')).forEach(key => {
+    key.addEventListener('transitionend', function (e) {
+        if (e.propertyName !== 'transform') return;
+        e.target.classList.remove('playing');
+    });
+    key.addEventListener("click", function (e) {
+        var code = key.getAttribute('data-key');
+        console.log(e, code);
+        playAudio(code);
+        key.classList.add("playing");
+    });
+  });
+</script>
+
+    <style>
+        html {
+            font-size: 10px;
+            background: url(http://i.imgur.com/b9r5sEL.jpg) bottom center;
+            background-size: cover;
+        }
+        
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+        }
+        
+        .keys {
+            display: flex;
+            flex: 1;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .key {
+            border: 4px solid black;
+            border-radius: 5px;
+            margin: 1rem;
+            font-size: 1.5rem;
+            padding: 1rem .5rem;
+            transition: all .07s;
+            width: 100px;
+            text-align: center;
+            color: white;
+            background: rgba(0, 0, 0, 0.4);
+            text-shadow: 0 0 5px black;
+            cursor: pointer
+        }
+        
+        .playing {
+            transform: scale(1.1);
+            border-color: #ffc600;
+            box-shadow: 0 0 10px #ffc600;
+        }
+        
+        kbd {
+            display: block;
+            font-size: 40px;
+        }
+        
+        .sound {
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #ffc600;
+        }
+    </style>
+</body>
+
+</html>
